@@ -383,7 +383,6 @@ console.log(heropy)
 console.log(amy.getFullName())
 console.log(neo.getFullName())
 
-*/
 
 // JS Class의 상속(확장)
 class Vehicle {
@@ -415,3 +414,298 @@ const myCar = new Car('현대차', 4, true)
 const daughtersCar = new Car('포르쉐', 4, false)
 console.log(myCar)
 console.log(daughtersCar)
+
+
+// JS 데이터
+// JS 데이터를 다룰 수 있는 상세한 명령들에 대해서 Araboza!
+
+// String: "", '', ``
+// Number
+// Boolean: true, false
+// undefined
+// null
+// Array: []
+// Object: {}
+
+// String
+// MDN : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String
+
+{
+  // String.prototype.indexOf()
+  const result = 'Hello world!'.indexOf('world')
+  const result2 = 'Hello world!'.indexOf('Heropy')
+  console.log(result) // 6
+  console.log(result2) // -1 (일치하는 값 없음)
+
+  const str = 'Hello world!'
+  console.log(str.indexOf('HEROPY') !== -1) // false
+}
+
+{
+  const str = '01 23'
+  console.log(str.length) // 5 (공백도 하나의 문자열임)
+}
+
+{
+  const str = 'Hello world!'
+  console.log(str.slice(6, 11)) // world
+}
+
+{
+  const str = 'Hello world!'
+  console.log(str.replace('world', 'yeon')) // Hello yeon!
+  console.log(str.replace(' world!', '')) // Hello - 이렇게 문자를 제거하는 데에도 활용 가능
+}
+
+{
+  const str = 'thesecon@gmail.com'
+  console.log(str.match(/.+(?=@)/)[0]) // thesecon
+}
+
+{
+  const str = '     Hello world!   '
+  console.log(str.trim()) // Hello world! (문자 앞뒤에 있던 공백들이 사라짐)
+}
+
+// Number
+const pi = 3.14159265358979
+console.log(pi)
+
+const str = pi.toFixed(2)
+console.log(str) // 3.14
+console.log(typeof str) // string
+
+const integer = parseInt(str)
+const float = parseFloat(str)
+console.log(integer) // 3
+console.log(float) // 3.14
+console.log(typeof integer, typeof float) // number number
+
+{
+  // - Math
+  // - MDN : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math
+
+  console.log('abs: ', Math.abs(-12)) // 12
+
+  console.log('min: ', Math.min(2, 8)) // 2
+  console.log('max: ', Math.max(2, 8)) // 8
+
+  console.log('ceil: ', Math.ceil(3.14)) // 4
+  console.log('floor: ', Math.floor(3.14)) // 3
+  console.log('round: ', Math.round(3.14)) // 3
+  // (* 기본적으로 JS는 정수 단위로 올림, 내림, 반올림 처리를 한다.)
+
+  console.log('random: ', Math.random()) // 랜덤한 숫자를 반환 (ex. 0.38055767506777594)
+}
+
+// Array
+// MDN : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
+// Terms : index, indexing, element(item)
+
+const numbers = [1, 2, 3, 4]
+const fruits = ['Apple', 'Banana', 'Cherry']
+
+console.log(numbers[1]) // 2
+console.log(fruits[2]) // Cherry
+
+{
+  // .length
+  const numbers = [1, 2, 3, 4]
+  const fruits = ['Apple', 'Banana', 'Cherry']
+
+  console.log(numbers.length) // 4
+  console.log(fruits.length) // 3
+  console.log([1, 2].length) // 2
+
+  console.log([].length) // 0 - 이런 식으로 배열 데이터의 내용이 채워져 있는지 그렇지 않은지를 확인하는 경우가 굉장히 많음
+}
+
+{
+  // .concat()
+  // ⭐ 원본 배열 데이터 수정되지 X
+  const numbers = [1, 2, 3, 4]
+  const fruits = ['Apple', 'Banana', 'Cherry']
+
+  console.log(numbers.concat(fruits)) // [1, 2, 3, 4, 'Apple', 'Banana', 'Cherry']
+  console.log(numbers) // [1, 2, 3, 4]
+  console.log(fruits) // ['Apple', 'Banana', 'Cherry']
+}
+
+{
+  // .forEach()
+  // 배열 데이터의 item의 개수만큼 콜백함수를 반복적으로 실행
+  // 따로 반환되는 값은 없음
+  const numbers = [1, 2, 3, 4]
+  const fruits = ['Apple', 'Banana', 'Cherry']
+
+  fruits.forEach(function(fruit, i) {
+    console.log(fruit, i)
+  })
+}
+
+{
+  // .map()
+  // 배열 데이터의 item의 개수만큼 콜백함수를 반복적으로 실행
+  // 콜백 내부에서 return 키워드를 통해 반환한 데이터를 새로운 배열로 만들어서 사용할 수 있다.
+  // ⭐ 원본 배열 데이터 수정되지 X
+  const numbers = [1, 2, 3, 4]
+  const fruits = ['Apple', 'Banana', 'Cherry']
+
+  const a = fruits.forEach((fruit, index) => {
+    console.log(`${fruit}-${index}`)
+  })
+  console.log(a) // undefined
+
+  const b = fruits.map((fruit, index) => {
+    return `${fruit}-${index}`
+  })
+  console.log(b) // ['Apple-0', 'Banana-1', 'Cherry-2']
+
+  // 이런 방식으로 배열 데이터를 객체 데이터로 새롭게 만들어서 활용할 수 있다. (많이 사용되는 방식임)
+  const c = fruits.map((fruit, index) => ({
+    id: index,
+    name: fruit,
+  }))
+  console.log(c)
+}
+
+{
+  // .filter()
+  // 배열 데이터 안에 들어있는 각각의 item들을 특정한 기준에 의해서 필터링을 함. 필터된 새로운 배열 데이터를 결과로 반환함
+  // 콜백함수에서 반환된 값이 true인 경우에만 해당 item을 배열에 넣어줌
+  // ⭐ 원본 배열 데이터 수정되지 X
+  const numbers = [1, 2, 3, 4]
+  const fruits = ['Apple', 'Banana', 'Cherry']
+
+  const a = numbers.map((number) => number < 3)
+  console.log(a) // [true, true, false, false]
+
+  const b = numbers.filter((number) => number < 3)
+  console.log(b) // [1, 2]
+
+  console.log(numbers) // [1, 2, 3, 4]
+}
+
+{
+  // .find()
+  // 배열 데이터 안에서 조건에 맞는 특정한 item을 찾을 때 사용
+  // 콜백 내에서 뭔가를 찾으면 반복이 종료되고 찾아진 배열의 item이 반환된다.
+  const numbers = [1, 2, 3, 4]
+  const fruits = ['Apple', 'Banana', 'Cherry']
+
+  const a = fruits.find((fruit) => /^B/.test(fruit))
+  console.log(a) // Banana
+
+  // .findIndex()
+  // 찾아진 item의 index 번호를 반환
+  const b = fruits.findIndex((fruit) => /^B/.test(fruit))
+  console.log(b) // 1
+}
+
+{
+  // .includes()
+  const numbers = [1, 2, 3, 4]
+  const fruits = ['Apple', 'Banana', 'Cherry']
+
+  const a = numbers.includes(3)
+  console.log(a) // true
+
+  const b = fruits.includes('HEROPY')
+  console.log(b) // false
+}
+
+{
+  // .push() .unshift()
+  // ⭐ 원본 수정됨 주의!
+  const numbers = [1, 2, 3, 4]
+  const fruits = ['Apple', 'Banana', 'Cherry']
+
+  numbers.push(5)
+  console.log(numbers) // [1, 2, 3, 4, 5]
+
+  numbers.unshift(0)
+  console.log(numbers) // [0, 1, 2, 3, 4, 5]
+}
+
+{
+  // .reverse()
+  // ⭐ 원본 수정됨 주의!
+  const numbers = [1, 2, 3, 4]
+  const fruits = ['Apple', 'Banana', 'Cherry']
+
+  numbers.reverse()
+  fruits.reverse()
+
+  console.log(numbers) // [4, 3, 2, 1]
+  console.log(fruits) // ['Cherry', 'Banana', 'Apple']
+}
+
+{
+  // .splice() - 2가지 기능
+  // 1. 배열 데이터에서 특정한 item들을 *삭제할 때* 사용
+  // (배열 데이터 안에서 특정한 index 번호를 가지고 몇 개의 item을 지울지 결정할 수 있다.)
+  // 2. 세 번째 인수로 그 자리에 *끼워넣을* 새로운 item을 명시할 수 있다.
+  // ⭐ 원본 수정됨 주의!
+  const numbers = [1, 2, 3, 4]
+  const fruits = ['Apple', 'Banana', 'Cherry']
+
+  numbers.splice(2, 1)
+  console.log(numbers) // [1, 2, 4]
+
+  fruits.splice(1, 0, 'Apricot')
+  console.log(fruits) // ['Apple', 'Apricot', 'Banana', 'Cherry']
+  fruits.splice(2, 1, 'Blueberry')
+  console.log(fruits) // ['Apple', 'Apricot', 'Blueberry', 'Cherry']
+}
+
+// Object
+// MDN : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object#static_methods
+
+const userAge = {
+  // key: value
+  name: 'Heropy',
+  age: 85,
+}
+
+const userEmail = {
+  name: 'Heropy',
+  email: 'thesecon@gmail.com',
+}
+
+{
+  // userAge나 userEmail에는 assign 메소드를 사용할 수 없다. assign이라는 메소드는 Object라는 JS의 전역 객체 부분의 프로토타입으로 만들어져 있는 메소드가 아니기 때문에 실제 객체 데이터 자체에는 사용할 수가 없다.
+  // assign 메소드는 Object라는 JS의 전역 객체에 직접적으로 사용하는 메소드이고 이것을 정적 메소드(static method)라고 함
+  const target = Object.assign(userAge, userEmail)
+  console.log(target) // {name: 'Heropy', age: 85, email: 'thesecon@gmail.com'}
+  console.log(userAge) // {name: 'Heropy', age: 85, email: 'thesecon@gmail.com'}
+  console.log(target === userAge) // true
+
+  // if) userAge와 userEmail을 합쳐서 새로운 객체 데이터를 만들고 싶다면?
+  // const target = Object.assign({}, userAge, userEmail)
+  // 이렇게 하면 위의 경우와는 다르게 원본 데이터를 손상하지 않고 userAge와 userEmail의 속성들을 합쳐놓은 새로운 객체 데이터를 만들어서 Object.assign()이라는 정적 메소드에서 반환받아서 사용할 수 있다.
+
+  // const target = Object.assign({}, userAge)
+  // 특정한 객체 데이터(바로 위의 예시에서는 userAge)를 복사하는 용도로 사용할 수도 있다.
+
+  const a = { k: 123 }
+  const b = { k: 123 }
+  console.log(a === b) // false - a와 b는 생긴 것은 똑같지만, 서로 다른 객체임!
+}
+
+{
+  const user = {
+    name: 'Heropy',
+    age: 85,
+    email: 'thesecon@gmail.com',
+  }
+
+  const keys = Object.keys(user)
+  console.log(keys) // ['name', 'age', 'email']
+
+  // 객체 데이터에서 대괄호[]를 사용하는 indexing 방식을 통해 좀 더 동적으로 객체 데이터에 있는 내용들을 가져와서 활용할 수 있다.
+  console.log(user['email']) // thesecon@gmail.com
+
+  const values = keys.map((key) => user[key])
+  console.log(values) // ['Heropy', 85, 'thesecon@gmail.com']
+}
+*/
