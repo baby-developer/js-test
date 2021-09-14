@@ -904,4 +904,47 @@ console.log(typeof str)
 
 const obj = JSON.parse(str)
 console.log('obj', obj)
+
+// Local Storage, Session Storage
+// 사이트를 나갈 때 Storage의 데이터가 지워지게 해야 하는 경우가 아니라면, 일반적으로는 localStorage가 더 활용도가 높다.
+const user = {
+  name: 'HEROPY',
+  age: 85,
+  Emails: ['thesecon@gmail.com', 'neo@zillinks.com'],
+}
+
+// localStorage.setItem('user', JSON.stringify(user))
+// console.log(JSON.parse(localStorage.getItem('user')))
+// localStorage.removeItem('user')
+
+// localStorage의 내용을 수정할 때는 이렇게 하면 됨
+const str = localStorage.getItem('user')
+const obj = JSON.parse(str)
+obj.age = 22
+console.log(obj)
+localStorage.setItem('user', JSON.stringify(obj))
+
+// -> 이런식으로 데이터를 다루는 방식이 좀 원시적이기 때문에 lodash 패키지의 기능을 활용해서 Local Storage를 하나의 DB처럼 쉽게 관리해 줄 수 있는 패키지가 있음(lowdb -> https://github.com/typicode/lowdb). 지금 당장은 아니더라도 나중에 활용해 보면 좋을 것 같습니당!
+
+
+// OMDb API
+// Query String: 주소?속성=값&속성=값&속성=값
+// axios 패키지
+
+import axios from 'axios'
+
+function fetchMovies() {
+  axios
+    .get('https://www.omdbapi.com/?apikey=7035c60c&s=frozen')
+    .then(res => {
+      console.log(res)
+      const h1El = document.querySelector('h1')
+      const imgEl = document.querySelector('img')
+      h1El.textContent = res.data.Search[0].Title
+      imgEl.src = res.data.Search[0].Poster
+    })
+}
+fetchMovies()
+
+// 처음에 JS를 공부할 때는 JS로 브라우저의 페이지에 결과물을 직접적으로 출력하려고 노력하지 말고 되도록이면 console창만 켜놓고 console창에서 데이터가 어떻게 처리되는지를 연습을 많이 하는 것이 중요하다! JS를 통해서 웹페이지에 출력하는 결과물들을 만들어 보는 것은 Vue나 React를 배울 때 좀 더 자세히 알아볼 것임. 지금까지 배운 JS의 데이터를 처리하는 여러 가지 방법들에 대해서 충분히 많이 복습하고 숙달된 만큼 Vue나 React가 훨씬 더 쉬워질 것임
 */
