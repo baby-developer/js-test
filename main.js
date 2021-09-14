@@ -1,6 +1,7 @@
 /*
 import getType from './getType'
 import random from './getRandom'
+import _ from 'lodash'
 
 console.log(typeof 'Hello world!') // string
 console.log(typeof 123) // number
@@ -708,4 +709,199 @@ const userEmail = {
   const values = keys.map((key) => user[key])
   console.log(values) // ['Heropy', 85, 'thesecon@gmail.com']
 }
+
+// 구조 분해 할당 (Destructuring assignment)
+// 비구조화 할당
+// 필요한 것들만 꺼내서 쓸 수 있다.
+
+const user = {
+  name: 'Heropy',
+  age: 85,
+  email: 'thesecon@gmail.com',
+}
+const { name: heropy, age, email, address = 'korea' } = user
+// =user.name  =user['name']  -> 이렇게 하는 것과 동일
+// address = 'korea'  -> 구조 분해 할당에서 기본값을 지정해주는 방법! 아주 자주 사용되지는 않지만, 간혹 필요한 경우들이 있음
+// 구조 분해 할당을 통해 특정한 객체에서 데이터를 꺼내올 때는 그 데이터의 이름을 정확하게 작성하되, 만약 활용할 때는 그 데이터의 이름과 다른 이름으로 활용하고 싶다면 name: heropy(원하는 변수의 이름) 이렇게 표기해 주면 됨
+
+console.log(`사용자의 이름은 ${heropy}입니다.`) // 사용자의 이름은 Heropy입니다.
+console.log(`${heropy}의 나이는 ${age}세입니다.`) // Heropy의 나이는 85세입니다.
+console.log(`${heropy}의 이메일 주소는 ${email}입니다.`) // Heropy의 이메일 주소는 thesecon@gmail.com입니다.
+console.log(address) // korea
+
+// 배열 데이터는 객체 데이터와 다르게 이름으로 구조 분해해서 추출하는 것이 아니라, *순서대로* 추출되는 것임
+const fruits = ['apple', 'banana', 'Cherry']
+const [a, b, c, d] = fruits
+// const [, b] = fruits
+// -> 'banana'만 꺼내오고 싶다면, 'apple'은 활용하지 않을 거니까 a를 지워주면 됨. 그 대신 쉼표는 꼭 남겨둬야 함 (배열 데이터는 순서가 중요하기 때문에 명확히 해주기 위해서)
+console.log(a, b, c, d) // apple banana Cherry undefined
+
+
+// 전개 연산자 (Spread Operator)
+
+// 1. 배열 데이터를 쉼표(,)로 구분해서 전개
+const fruits = ['Apple', 'Banana', 'Cherry', 'Orange']
+console.log(fruits) // ['Apple', 'Banana', 'Cherry']
+console.log(...fruits) // Apple Banana Cherry
+// = console.log('Apple', 'Banana', 'Cherry')
+
+// 2. 매개변수에도 전개 연산자를 사용할 수 있다.
+// 이 경우엔 c라는 매개변수가 나머지 모든 인수들을 다 받아내는 역할을 함 (배열의 형태로 순서대로 받아냄)
+// ...c  ->  Rest parameter '나머지 매개변수'
+
+const toObject = (a, b, ...c) => ({ a, b, c })
+console.log(toObject(...fruits)) // {a: 'Apple', b: 'Banana', c: ['Cherry', 'Orange']
+
+
+// 데이터 불변성(Immutability)
+// 원시 데이터: String, Number, Boolean, undefined, null
+// 참조형 데이터: Object, Array, Function
+
+// 원시 데이터들은 한 번 메모리에 만들어지면 새롭게 만들어지는 것이 아니고 항상 불변한다.
+// 따라서, 원시 데이터에서 메모리 주소까지 따져가면서 복잡하게 이해할 필요는 (일단은) 없다. 그냥 생긴게 같으면 같은 데이터(true), 생긴 게 다르면 다른 데이터(false)라고 이해하면 됨
+let a = 1
+let b = 4
+console.log(a, b, a === b) // 1 4 false
+b = a
+console.log(a, b, a === b) // 1 1 true
+a = 7
+console.log(a, b, a === b) // 7 1 false
+let c = 1
+console.log(b, c, b === c) // 1 1 true
+
+// * 참조형 데이터들은 생긴게 똑같아도 서로 같은 데이터가 아닐 수도 있다. *
+// 참조형 데이터는 원시형 데이터와 다르게 새로운 값을 만들 때마다 새로운 메모리 주소에 할당됨
+// 참조형 데이터는 불변성이 없다 === 가변한다
+let a = { k: 1 }
+let b = { k: 1 }
+console.log(a, b, a === b) // { k: 1 } { k: 1 } false
+a.k = 7
+b = a // 참조형 데이터를 관리할 때에는 할당 연산자를 쓰는 것이 의도치 않은 문제를 발생시킬 수 있기 때문에(한 곳만 수정했는데 다른 곳도 같이 수정되는..), 따로 의도한 것이 아니라면 일반적인 경우에는 '복사'라는 개념을 통해서 a와 b를 실제 메모리 상에서 분리해 줘야 한다.
+console.log(a, b, a === b) // { k: 7 } { k: 7 } true
+a.k = 2
+console.log(a, b, a === b) // { k: 2 } { k: 2 } true
+let c = b
+console.log(a, b, c, a === c) // { k: 2 } { k: 2 } { k: 2 } true
+a.k = 9
+console.log(a, b, c, a === c) // { k: 9 } { k: 9 } { k: 9 } true
+
+
+// 참조형 데이터를 복사하는 방법
+// 얕은 복사(Shallow copy), 깊은 복사(Deep copy)
+const user = {
+  name: 'Heropy',
+  age: 85,
+  emails: ['thesecon@gmail.com'],
+}
+
+// 얕은 복사
+// 참조형 데이터 내부에 또다른 참조형 데이터가 없는 경우엔 손쉽게 얕은 복사를 사용하면 됨
+// 방법 1. Object.assign
+// const copyUser = Object.assign({}, user)
+
+// 방법 2. Spread Operator
+// const copyUser = {...user}
+
+// 깊은 복사
+// 참조형 데이터 내부에 또다른 참조형 데이터가 있는 경우에는 깊은 복사를 고려해봐야 함
+// lodash 패키지의 cloneDeep의 도움을 받아서 개발하면 좋을 것 같다!
+const copyUser = _.cloneDeep(user)
+
+console.log(copyUser === user) // false
+
+user.age = 22
+console.log('user', user) // {name: 'Heropy', age: 22, emails: Array(1)}
+console.log('copyUser', copyUser) // {name: 'Heropy', age: 85, emails: Array(1)}
+
+console.log('------')
+console.log('------')
+
+user.emails.push('neo@zillinks.com')
+console.log(user.emails === copyUser.emails) // false
+console.log('user', user)
+console.log('copyUser', copyUser)
+
+// copyUser는 건들지도 않았는데, user와 copyUser의 emails가 같아져 버림.
+// why?) emails도 참조형 데이터(배열)이고, 따로 emails를 복사한 적은 없기 때문에 user와 copyUser의 emails는 여전히 같은 메모리 주소를 바라보고 있음
+// 깊은 복사를 통해 참조형 데이터 내부로 들어가서 모든 데이터들을 전부 복사 처리해야함
+// 깊은 복사는 JS로 직접적으로 구현하기엔 좀 복잡... lodash의 도움을 받아서 깊은 복사를 구현해보자!(위로 gogo)
+
+
+// 가져오기, 내보내기 - import, export
+import _ from 'lodash' // From `node_modules`!
+import checkType from './getType' // getType.js
+// import { random, user as heropy } from './getRandom' // getRandom.js
+import * as R from './getRandom' // getRandom이라는 js 파일에서 모든 export 내용을 가져와서 내가 지정한 이름의 변수에 할당해서(여기서는 R) 내부적으로 활용하는 개념
+
+console.log(_.camelCase('the hello world'))
+console.log(checkType([1, 2, 3]))
+// console.log(random(), random())
+// console.log(heropy)
+console.log(R)
+
+
+// lodash 패키지 사용법
+// lodash에서 제공하는 여러 가지 메소드들을 통해서 FE 개발을 할 때 여러 가지 데이터들을 처리하는 데에 많은 도움을 받을 수 있다.
+import _ from 'lodash'
+
+{
+  // FE 개발을 하면서 여러 데이터들의 고유화 처리를 할 때, uniqBy, unionBy를 많이 사용하게 될 것임!
+  const usersA = [
+    { userId: '1', name: 'HEROPY' },
+    { userId: '2', name: 'Neo' },
+  ]
+  const usersB = [
+    { userId: '1', name: 'HEROPY' },
+    { userId: '3', name: 'Amy' },
+  ]
+  const usersC = usersA.concat(usersB)
+  console.log('concat: ', usersC)
+  console.log('uniqBy: ', _.uniqBy(usersC, 'userId'))
+
+  const usersD = _.unionBy(usersA, usersB, 'userId')
+  console.log('unionBy: ', usersD)
+}
+
+{
+  const users = [
+    { userId: '1', name: 'HEROPY' },
+    { userId: '2', name: 'Neo' },
+    { userId: '3', name: 'Amy' },
+    { userId: '4', name: 'Evan' },
+    { userId: '5', name: 'Lewis' },
+  ]
+
+  const foundUser = _.find(users, { name: 'Amy' })
+  const foundUserIndex = _.findIndex(users, { name: 'Amy' })
+  console.log(foundUser)
+  console.log(foundUserIndex)
+
+  _.remove(users, { name: 'HEROPY' })
+  console.log(users)
+}
+
+
+// JSON (JavaScript Object Notation)
+// 자바스크립트의 객체 표기법
+// 하나의 JSON이 곧 하나의 데이터
+// JavaScript의 자료형 중에서 undefined를 제외한 나머지는 다 사용 가능함!
+// .json 파일은 하나의 문자 데이터임
+
+import myData from './myData.json'
+
+// console.log(typeof myData)
+
+const user = {
+  name: 'HEROPY',
+  age: 85,
+  Emails: ['thesecon@gmail.com', 'neo@zillinks.com'],
+}
+console.log('user', user)
+
+const str = JSON.stringify(user)
+console.log('str', str)
+console.log(typeof str)
+
+const obj = JSON.parse(str)
+console.log('obj', obj)
 */
